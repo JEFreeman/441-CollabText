@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">CollabText</string>
+    <string name="app_name">WeWrite</string>
     <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_doc_edit">DocEdit</string>
+    <string name="title">Title: </string>
+    <string name="need_title">Untitled</string>
+    <string name="undo">Undo</string>
+    <string name="redo">Redo</string>  
+    <string name="exit">Exit</string> 
+    <string name="create_session">Create Session</string>
+    <string name="join_session">Join Session</string>
 
 </resources>

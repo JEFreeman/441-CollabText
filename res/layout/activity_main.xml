@@ -8,19 +8,23 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity" >
 
-    <EditText
-        android:id="@+id/editText1"
+    <Button
+        android:id="@+id/createSession"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="15dp"
-        android:ems="12"
-        android:inputType="textMultiLine" >
+        android:layout_above="@+id/joinSession"
+        android:layout_centerHorizontal="true"
+        android:text="@string/create_session"
+        android:onClick="create" />
 
-        <requestFocus />
-    </EditText>
+    <Button
+        android:id="@+id/joinSession"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="40dp"
+        android:text="@string/join_session"
+        android:onClick="join" />
 
 </RelativeLayout>
