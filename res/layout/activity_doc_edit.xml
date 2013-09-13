@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
- android:layout_width="fill_parent"
- android:layout_height="fill_parent" >
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="bottom" >
 	
 	<TextView android:id="@+id/title_prompt"
 	    android:layout_width="wrap_content"
@@ -24,9 +25,10 @@
 	    android:background="@android:color/transparent" />
 
 	<FrameLayout
+	    android:id="@+id/layoutText"
 	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_alignParentBottom="true"
+	    android:layout_height="fill_parent"
+	    android:layout_alignParentBottom="false"
 	    android:layout_alignParentLeft="true"
 	    android:layout_alignParentRight="true"
 	    android:layout_below="@+id/title_prompt"
@@ -40,8 +42,34 @@
 	        android:inputType="textMultiLine"
 	        android:layout_marginTop="5sp"
 	        android:background="@android:color/white"
-	        android:gravity="top" />
-	
+	        android:gravity="top"
+	        android:onClick="movePointer" />
+
+	    <EditText
+	        android:id="@+id/sendTxt"
+	        android:layout_width="match_parent"
+	        android:layout_height="52dp"
+	        android:layout_gravity="bottom"
+	        android:background="@android:color/black"
+	        android:ems="10"
+	        android:hint="@string/newTextPrompt"
+	        android:inputType="text"
+	        android:paddingLeft="100dp"
+	        android:singleLine="true"
+	        android:textColor="@android:color/white"
+	        android:textSize="18sp" 
+	        android:onClick="sendText">
+
+	        <requestFocus />
+	    </EditText>
+
+	    <Button
+	        android:id="@+id/sendButton"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="bottom"
+	        android:background="@android:color/white"
+	        android:text="@string/send" />
 
 	</FrameLayout>
 

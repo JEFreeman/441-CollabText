@@ -11,5 +11,7 @@
     <string name="exit">Exit</string> 
     <string name="create_session">Create Session</string>
     <string name="join_session">Join Session</string>
+    <string name="send">Send</string>
+    <string name="newTextPrompt">...</string>
 
 </resources>
