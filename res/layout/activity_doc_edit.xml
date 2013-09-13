@@ -36,12 +36,12 @@
 	        android:id="@+id/editText1"
 	        android:layout_width="match_parent"
 	        android:layout_height="match_parent"
-	        android:textSize="18sp"
-	        android:inputType="textMultiLine"
 	        android:layout_marginTop="5sp"
 	        android:background="@android:color/white"
-	        android:gravity="top" />
-	
+	        android:gravity="top"
+	        android:inputType="textMultiLine"
+	        android:padding="15dp"
+	        android:textSize="18sp" />
 
 	</FrameLayout>
 
