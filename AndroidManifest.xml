@@ -25,8 +25,8 @@
             </intent-filter>
         </activity>
          <activity
-            android:name="com.example.collabtext.DocEdit"
-            android:label="@string/title_activity_doc_edit" 
+            android:name="com.example.collabtext.DocEditActivity"
+            android:label="@string/app_name" 
             android:parentActivityName="com.example.collabtext.MainActivity">
         </activity>
     </application>

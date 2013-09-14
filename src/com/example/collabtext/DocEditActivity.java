@@ -10,7 +10,7 @@ import android.view.Menu;
 import android.view.View;
 import android.content.Intent;
 
-public class DocEdit extends Activity {
+public class DocEditActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

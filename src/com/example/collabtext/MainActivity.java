@@ -17,13 +17,13 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 	}
 		
-	public void join(View view){	
-		Intent i = new Intent(this, DocEdit.class);
+	public void join(View view){
+		Intent i = new Intent(this, DocEditActivity.class);
 		startActivity(i);		
 	}
 		
 	public void create(View view){	
-		Intent i = new Intent(this, DocEdit.class);
+		Intent i = new Intent(this, DocEditActivity.class);
 		startActivity(i);
 	}
 	
