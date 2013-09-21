@@ -1,21 +1,25 @@
 package com.example.collabtext;
 
-import java.util.List;
-
 import android.app.Activity;
-import android.database.Cursor;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
-import android.view.View;
+import android.view.MenuItem;
+import android.widget.EditText;
 import android.content.Intent;
 
 public class DocEditActivity extends Activity {
-
-    @Override
+	
+	User notepad;
+    
+	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_doc_edit);
+        EditText ref = (EditText) findViewById(R.id.editText1);
+        notepad = new User(ref);
     }
 
     @Override
@@ -25,11 +29,17 @@ public class DocEditActivity extends Activity {
         return true;
     }
     
-    public void backToMain(View view){
+    public void undo(MenuItem menu){
+    	//notepad.undo();
+    }
+    
+    public void redo(MenuItem menu){
+    	//notepad.redo();
+    }
+    
+    public void backToMain(MenuItem menu){
     	Intent i = new Intent(this, MainActivity.class);
 		startActivity(i);
     }
-    
-    
     
 }

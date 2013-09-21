@@ -18,15 +18,15 @@ public class CircularBuffer<T> {
 		this.local_ptr = 0;
 	}
 	
-	public void push(T addedObject){
+	public void add(T addedObject){
 		if(++head_ptr == MAXSIZE){
-			head_ptr = 0;
+			head_ptr = 1;
 		}
 		local_ptr = head_ptr;
-		buffer.set(head_ptr, addedObject);
+		buffer.set(head_ptr-1, addedObject);
 	}
 	
-	public T get_undo(){	
+	public T getUndo(){	
 		if(--local_ptr < 0){
 			local_ptr = MAXSIZE;
 		}
@@ -38,7 +38,7 @@ public class CircularBuffer<T> {
 		}
 	}
 
-	public T get_redo(){
+	public T getRedo(){
 		if(++local_ptr >= MAXSIZE){
 			local_ptr = 0;
 		}

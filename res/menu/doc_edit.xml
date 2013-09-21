@@ -4,16 +4,19 @@
     <item android:id="@+id/undo"
         android:icon="@drawable/ic_action_undo" 
         android:title="@string/undo" 
-        android:showAsAction="ifRoom" />
+        android:showAsAction="ifRoom"
+        android:onClick="undo" />
     
     <item android:id="@+id/redo"
         android:icon="@drawable/ic_action_redo" 
         android:title="@string/redo" 
-        android:showAsAction="ifRoom" />
+        android:showAsAction="ifRoom"
+        android:onClick="redo" />
     
     <item android:id="@+id/exit"
         android:icon="@drawable/ic_action_exit" 
         android:title="@string/exit" 
-        android:showAsAction="ifRoom" />
+        android:showAsAction="ifRoom" 
+        android:onClick="backToMain" />
     
 </menu>

@@ -1,20 +1,13 @@
 package com.example.collabtext;
 
+import android.R.string;
+
 public class Move {
 
-	public int start_x;
-	public int start_y;
-	public int end_x;
-	public int end_y;	
-	public String change;
-	public MoveType type;
-	
-	public enum MoveType {
-		INSERT,
-		REMOVE,
-		REPLACE,
-		MOVING,
-		CURSOR_CHANGE
-	}
-	
+	public int start_coordinate;
+	public int old_length;  //delete this many char before adding
+	public int new_length;
+	public String change = "";
+	public boolean type;
+
 }
