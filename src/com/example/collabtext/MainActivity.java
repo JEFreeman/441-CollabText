@@ -1,34 +1,404 @@
 package com.example.collabtext;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import edu.umich.imlc.android.common.Utils;
+import edu.umich.imlc.collabrify.client.CollabrifyAdapter;
+import edu.umich.imlc.collabrify.client.CollabrifyClient;
+import edu.umich.imlc.collabrify.client.CollabrifyListener;
+import edu.umich.imlc.collabrify.client.CollabrifySession;
+import edu.umich.imlc.collabrify.client.exceptions.CollabrifyException;
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.TextView;
 
 public class MainActivity extends Activity {
 	
 	MasterControl lineCom = new MasterControl();
 	//long int userID //based on surface/tablet's serial#?
 
+	/**
+	   * Logging level for HTTP requests/responses.
+	   * <p>
+	   * To turn on, set to {@link Level#CONFIG} or {@link Level#ALL} and run this
+	   * from command line: {@code adb shell setprop log.tag.HttpTransport DEBUG}.
+	   * </p>
+	   */
+	  private static final Level LOGGING_LEVEL = Level.ALL;
+
+	  private static String TAG = "collabText";
+
+	  private CollabrifyClient myClient;
+	  private TextView textViewer;
+	  private EditText broadcastText;
+	  private Button broadcastButton;
+	  private Button createButton;
+	  private Button joinSessionButton;
+	  private Button leaveSessionButton;
+	  private CheckBox withBaseFile;
+	  private CollabrifyListener collabrifyListener;
+	  private long sessionId;
+	  private String sessionName;
+	  private ByteArrayInputStream baseFileBuffer;
+	  private ByteArrayOutputStream baseFileReceiveBuffer;
+	  private ArrayList<String> tags = new ArrayList<String>();
+	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
-	}
+		setContentView(R.layout.activity_doc_edit);
 		
-	public void join(View view){	
-		Intent i = new Intent(this, DocEdit.class);
-		startActivity(i);		
-	}
 		
-	public void create(View view){	
-		Intent i = new Intent(this, DocEdit.class);
-		startActivity(i);
-	}
+		//withBaseFile = (CheckBox) findViewById(R.id.withBaseFileCheckBox);
+	    
+		broadcastText = (EditText) findViewById(R.id.sendTxt);
+		textViewer = (EditText) findViewById(R.id.editText1);
+	    broadcastButton = (Button) findViewById(R.id.sendButton);
+	    createButton = (Button) findViewById(R.id.connectButt);
+	    joinSessionButton = (Button) findViewById(R.id.joinButt);
+	    leaveSessionButton = (Button) findViewById(R.id.leaveButt);
+	   
+	    // enable logging
+	    Logger.getLogger("edu.umich.imlc.collabrify.client").setLevel(LOGGING_LEVEL);
+
+	    //pull text from broadcast box and send it to myClient
+	    broadcastButton.setOnClickListener(new OnClickListener()
+	    {
+	      @Override
+	      public void onClick(View v)
+	      {
+	        if( broadcastText.getText().toString().isEmpty() )
+	          return; //break if no text added
+	        if( myClient != null && myClient.inSession() ) //if in session
+	        {
+	          try
+	          {
+	            myClient.broadcast(broadcastText.getText().toString().getBytes(), "lol");
+	            broadcastText.getText().clear();
+	          }
+	          catch( CollabrifyException e ){Log.e(TAG, "error", e);}
+	        }
+	      }
+	    });
+		 
+	    createButton.setOnClickListener(new OnClickListener()
+	    {
+
+	      @Override
+	      public void onClick(View v)
+	      {
+	        try
+	        {
+	          Random rand = new Random();
+	          sessionName = "C0llabT3xt " + rand.nextInt(Integer.MAX_VALUE);
+
+	          if( false)//withBaseFile.isChecked() ) //NOTE: must have a checkbox/option for this, currently unused.
+	          {
+	            // initialize basefile data for this example we will use the session
+	            // name as the data
+	            baseFileBuffer = new ByteArrayInputStream(sessionName.getBytes());
+
+	            myClient.createSessionWithBase(sessionName, tags, null, 0);
+	          }
+	          else
+	          {
+	            myClient.createSession(sessionName, tags, null, 0);
+	          }
+	          Log.i(TAG, "Session name is " + sessionName);
+	        }
+	        catch( CollabrifyException e ){Log.e(TAG, "error", e);}
+	      }
+	    });
+	    
+	    joinSessionButton.setOnClickListener(new OnClickListener()
+	    {
+
+	      @Override
+	      public void onClick(View v)
+	      {
+	        try
+	        {
+	          myClient.requestSessionList(tags); //shows list of available sessions
+	        }
+	        catch( Exception e ){Log.e(TAG, "error", e);}
+	      }
+	    });
+	    
+	    leaveSessionButton.setOnClickListener(new OnClickListener()
+	    {
+
+	      @Override
+	      public void onClick(View v)
+	      {
+	        try
+	        {
+	          if( myClient.inSession() )
+	            myClient.leaveSession(false); //if true, deletes session when owner leaves
+	        }
+	        catch( CollabrifyException e ){Log.e(TAG, "error", e);}
+	      }
+	    });
+	    
+	    collabrifyListener = new CollabrifyAdapter()
+	    {
+
+	      @Override
+	      public void onDisconnect()
+	      {
+	        Log.i(TAG, "disconnected");
+	        runOnUiThread(new Runnable()
+	        {
+
+	          @Override
+	          public void run()
+	          {
+	        	  createButton.setText("CreateSession"); 
+	        	  //just resets text of the create button when you leave. 
+	        	  //this is because the default is to 
+	          }
+	        });
+	      }
+	      
+	      @Override
+	      public void onReceiveEvent(final long orderId, int subId, String eventType, final byte[] data)
+	      {
+	        Utils.printMethodName(TAG);
+	        Log.d(TAG, "RECEIVED SUB ID:" + subId);
+	        runOnUiThread(new Runnable()
+	        {
+	          @Override
+	          public void run()
+	          {
+	            Utils.printMethodName(TAG);
+	            String message = new String(data);
+	            textViewer.setText(message); //should write to the text box when text is sent over the connection.
+	          }
+	        });
+	      }
+	      
+	      @Override
+	      public void onReceiveSessionList(final List<CollabrifySession> sessionList)
+	      {
+	        if( sessionList.isEmpty() )
+	        {
+	          Log.i(TAG, "No session available");
+	          return;
+	        }
+	        List<String> sessionNames = new ArrayList<String>();
+	        for( CollabrifySession s : sessionList )
+	        {
+	          sessionNames.add(s.name());
+	        }
+	        final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+	        builder.setTitle("Choose Session").setItems(
+	            sessionNames.toArray(new String[sessionList.size()]),
+	            new DialogInterface.OnClickListener()
+	            {
+	              @Override
+	              public void onClick(DialogInterface dialog, int which)
+	              {
+	                try
+	                {
+	                  sessionId = sessionList.get(which).id();
+	                  sessionName = sessionList.get(which).name();
+	                  myClient.joinSession(sessionId, null);
+	                }
+	                catch( CollabrifyException e ){Log.e(TAG, "error", e);}
+	              }
+	            });
+
+	        runOnUiThread(new Runnable()
+	        {
+
+	          @Override
+	          public void run()
+	          {
+	            builder.show();
+	          }
+	        });
+	      }
+
+	      @Override
+	      public void onSessionCreated(long id)
+	      {
+	        Log.i(TAG, "Session created, id: " + id);
+	        sessionId = id;
+	        runOnUiThread(new Runnable()
+	        {
+
+	          @Override
+	          public void run()
+	          {
+	        	  createButton.setText(sessionName); 
+	        	  //unnecessary, but should display sessionname somewhere
+	          }
+	        });
+	      }
+
+	      @Override
+	      public void onError(CollabrifyException e){Log.e(TAG, "error", e);}
+
+	      @Override
+	      public void onSessionJoined(long maxOrderId, long baseFileSize)
+	      {
+	        Log.i(TAG, "Session Joined");
+	        if( baseFileSize > 0 )
+	        {
+	          //initialize buffer to receive base file
+	          baseFileReceiveBuffer = new ByteArrayOutputStream((int) baseFileSize);
+	        }
+	        runOnUiThread(new Runnable()
+	        {
+
+	          @Override
+	          public void run()
+	          {
+	        	  createButton.setText(sessionName);
+	          }
+	        });
+	      }
+
+	      /*
+	       * (non-Javadoc)
+	       * 
+	       * @see
+	       * edu.umich.imlc.collabrify.client.CollabrifyAdapter#onBaseFileChunkRequested
+	       * (long)
+	       */
+	      @Override
+	      public byte[] onBaseFileChunkRequested(long currentBaseFileSize)
+	      {
+	        // read up to max chunk size at a time
+	        byte[] temp = new byte[CollabrifyClient.MAX_BASE_FILE_CHUNK_SIZE];
+	        int read = 0;
+	        try
+	        {
+	          read = baseFileBuffer.read(temp);
+	        }
+	        catch( IOException e )
+	        {
+	          // TODO Auto-generated catch block
+	          e.printStackTrace();
+	        }
+	        if( read == -1 )
+	        {
+	          return null;
+	        }
+	        if( read < CollabrifyClient.MAX_BASE_FILE_CHUNK_SIZE )
+	        {
+	          // Trim garbage data
+	          ByteArrayOutputStream bos = new ByteArrayOutputStream();
+	          bos.write(temp, 0, read);
+	          temp = bos.toByteArray();
+	        }
+	        return temp;
+	      }
+
+	      /*
+	       * (non-Javadoc)
+	       * 
+	       * @see
+	       * edu.umich.imlc.collabrify.client.CollabrifyAdapter#onBaseFileChunkReceived
+	       * (byte[])
+	       */
+	      @Override
+	      public void onBaseFileChunkReceived(byte[] baseFileChunk)
+	      {
+	        try
+	        {
+	          if( baseFileChunk != null )
+	          {
+	            baseFileReceiveBuffer.write(baseFileChunk);
+	          }
+	          else
+	          {
+	            runOnUiThread(new Runnable()
+	            {
+	              @Override
+	              public void run()
+	              {
+	            	  textViewer.setText(baseFileReceiveBuffer.toString());
+	              }
+	            });
+	            baseFileReceiveBuffer.close();
+	          }
+	        }
+	        catch( IOException e )
+	        {
+	          // TODO Auto-generated catch block
+	          e.printStackTrace();
+	        }
+	      }
+
+	      /*
+	       * (non-Javadoc)
+	       * 
+	       * @see
+	       * edu.umich.imlc.collabrify.client.CollabrifyAdapter#onBaseFileUploadComplete
+	       * (long)
+	       */
+	      @Override
+	      public void onBaseFileUploadComplete(long baseFileSize)
+	      {
+	        runOnUiThread(new Runnable()
+	        {
+
+	          @Override
+	          public void run()
+	          {
+	        	  textViewer.setText(sessionName);
+	          }
+	        });
+	        try
+	        {
+	          baseFileBuffer.close();
+	        }
+	        catch( IOException e )
+	        {
+	          // TODO Auto-generated catch block
+	          e.printStackTrace();
+	        }
+	      }
+	    };
+
+	    boolean getLatestEvent = false; 
+	    //true == only get latest update (used for models where whole file is sent at once.
+	    //false allows it to grab all updates.
+
+	    // Instantiate client object
+	    try
+	    {
+	      myClient = new CollabrifyClient(this, "user email", "user display name",
+	          "441fall2013@umich.edu", "XY3721425NoScOpE", getLatestEvent,
+	          collabrifyListener);
+	    }
+	    catch( CollabrifyException e )
+	    {
+	      e.printStackTrace();
+	    }
+
+
+	    tags.add("default");
+	       
+	}//end onCreate
 	
 	public void sendText(View view){
 		//handle incoming text from txtbox and forward it to the control
@@ -49,7 +419,7 @@ public class MainActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
+		//getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
 
