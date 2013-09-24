@@ -30,7 +30,7 @@ public class DocEditActivity extends Activity {
     }
     
     public void undo(MenuItem menu){
-    	//notepad.undo();
+    	notepad.undo();
     }
     
     public void redo(MenuItem menu){
