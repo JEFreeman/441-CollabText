@@ -15,6 +15,7 @@ public class CircularBuffer<T> {
 	private int head_ptr;
 	private int local_ptr;
 	
+	
 	CircularBuffer(){
 		this.head_ptr = 0;
 		this.local_ptr = 0;
