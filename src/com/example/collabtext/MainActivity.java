@@ -15,6 +15,10 @@ import edu.umich.imlc.collabrify.client.CollabrifyClient;
 import edu.umich.imlc.collabrify.client.CollabrifyListener;
 import edu.umich.imlc.collabrify.client.CollabrifySession;
 import edu.umich.imlc.collabrify.client.exceptions.CollabrifyException;
+import com.example.collabtext.CollabTextProto;
+import com.example.collabtext.CollabTextProto.globalMove;
+import com.google.protobuf.InvalidProtocolBufferException;
+
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -91,7 +95,15 @@ public class MainActivity extends Activity {
 	        {
 	          try
 	          {
-	            myClient.broadcast(broadcastText.getText().toString().getBytes(), "lol");
+	        	globalMove message = 
+	        			globalMove.newBuilder()
+	        			.setDelete(false)
+	        			.setLocation(0)
+	        			.setLength(broadcastText.getText().toString().length())
+	        			.setText(broadcastText.getText().toString())
+	        			.build();
+	        	
+	            myClient.broadcast(message.toByteArray(), "lol");
 	            broadcastText.getText().clear();
 	          }
 	          catch( CollabrifyException e ){Log.e(TAG, "error", e);}
@@ -188,8 +200,18 @@ public class MainActivity extends Activity {
 	          public void run()
 	          {
 	            Utils.printMethodName(TAG);
-	            String message = new String(data);
-	            textViewer.setText(message); //should write to the text box when text is sent over the connection.
+	            String message1 = new String(data);
+	            
+	            globalMove message;
+				try {
+					message = globalMove.parseFrom(data);
+					textViewer.setText(message.getText()); 
+					//should write to the text box when text is sent over the connection.
+				} catch (InvalidProtocolBufferException e) {
+					// TODO Auto-generated catch block
+					Log.e(TAG, "error", e);
+				}
+	            
 	          }
 	        });
 	      }
