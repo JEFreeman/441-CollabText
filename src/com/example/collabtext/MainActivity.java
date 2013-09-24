@@ -71,13 +71,13 @@ public class MainActivity extends Activity {
 
 		//withBaseFile = (CheckBox) findViewById(R.id.withBaseFileCheckBox);
 
-		broadcastText = (EditText) findViewById(R.id.sendTxt);
+		/*broadcastText = (EditText) findViewById(R.id.sendTxt);
 		textViewer = (EditText) findViewById(R.id.editText1);
 	    broadcastButton = (Button) findViewById(R.id.sendButton);
 	    createButton = (Button) findViewById(R.id.connectButt);
 	    joinSessionButton = (Button) findViewById(R.id.joinButt);
 	    leaveSessionButton = (Button) findViewById(R.id.leaveButt);
-
+*/
 	    // enable logging
 	    Logger.getLogger("edu.umich.imlc.collabrify.client").setLevel(LOGGING_LEVEL);
 
