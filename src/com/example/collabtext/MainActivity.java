@@ -74,7 +74,6 @@ public class MainActivity extends Activity {
 		/*broadcastText = (EditText) findViewById(R.id.sendTxt);
 		textViewer = (EditText) findViewById(R.id.editText1);
 	    broadcastButton = (Button) findViewById(R.id.sendButton);
-	    createButton = (Button) findViewById(R.id.connectButt);
 	    joinSessionButton = (Button) findViewById(R.id.joinButt);
 	    leaveSessionButton = (Button) findViewById(R.id.leaveButt);
 */

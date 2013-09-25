@@ -90,7 +90,7 @@ public class DocEditActivity extends Activity {
 		        return;
 		      }
 		      List<String> sessionNames = new ArrayList<String>();
-		      int watcher = 0;
+		      int watcher = -1;
 		      int clock = 0;
 		      for( CollabrifySession s : sessionList )
 		      {
@@ -139,6 +139,7 @@ public class DocEditActivity extends Activity {
 		            globalMove message;
 					try {
 						message = globalMove.parseFrom(data);
+						
 						//textViewer.setText(message.getText()); 
 						//need to edit this to send user the data.
 						//should write to the text box when text is sent over the connection.
@@ -319,10 +320,11 @@ public class DocEditActivity extends Activity {
     }
     
     public void createSession(){
-    	try
+    	this.joinSession();
+    	/*try
         {
           sessionName = "C0llabT3xt2319"; //name hardcoded for now
-
+         
           if( false)//withBaseFile.isChecked() ) //NOTE: must have a checkbox/option for this, currently unused.
           {
             // initialize basefile data for this example we will use the session
@@ -338,6 +340,7 @@ public class DocEditActivity extends Activity {
           Log.i(TAG, "Session name is " + sessionName);
         }
         catch( CollabrifyException e ){Log.e(TAG, "error", e);}
+        */
     }
     
     public void joinSession(){ 
