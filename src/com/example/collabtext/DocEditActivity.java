@@ -74,11 +74,16 @@ public class DocEditActivity extends Activity {
 	      myClient = new CollabrifyClient(this, "user email", "user display name",
 	          "441fall2013@umich.edu", "XY3721425NoScOpE", getLatestEvent,
 	          collabrifyListener);
+	      
+	      Log.i(TAG, "myclient Created");
+	      
 	    }
 	    catch( CollabrifyException e )
 	    {
 	      e.printStackTrace();
 	    }
+	    
+	    tags.add("default");
 	    
 	    
 	    collabrifyListener = new CollabrifyAdapter(){
@@ -290,7 +295,40 @@ public class DocEditActivity extends Activity {
 		      }
 	    };
 	    
-	    tags.add("default");
+	    
+	    //create or join session
+	    if(myClient.inSession())
+    	{
+	    	try
+	        {
+	          myClient.requestSessionList(tags); //grabs list of available sessions & opens C0llabT3xt2319
+	        }
+	        catch( Exception e ){Log.e(TAG, "error", e);}
+    	}
+    	else
+    	{
+    		sessionName = "C0llabT3xt2319555"; //name hardcoded for now
+    		try
+            {
+              
+
+              if( false)//withBaseFile.isChecked() ) //NOTE: must have a checkbox/option for this, currently unused.
+              {
+                // initialize basefile data for this example we will use the session
+                // name as the data
+                baseFileBuffer = new ByteArrayInputStream(sessionName.getBytes());
+
+                myClient.createSessionWithBase(sessionName, tags, null, 0);
+              }
+              else
+              {
+                myClient.createSession(sessionName, tags, null, 0);
+              }
+              Log.i(TAG, "Session name is " + sessionName);
+            }
+            catch( CollabrifyException e ){Log.e(TAG, "Collab Connect Try Error", e);}
+    	}
+
     }
 	
     @Override
@@ -332,37 +370,6 @@ public class DocEditActivity extends Activity {
           catch( CollabrifyException e ){Log.e(TAG, "error", e);}
         }
     	
-    }
-    
-    public void createSession(){
-    	/*try
-        {
-          sessionName = "C0llabT3xt2319"; //name hardcoded for now
-
-          if( false)//withBaseFile.isChecked() ) //NOTE: must have a checkbox/option for this, currently unused.
-          {
-            // initialize basefile data for this example we will use the session
-            // name as the data
-            baseFileBuffer = new ByteArrayInputStream(sessionName.getBytes());
-
-            myClient.createSessionWithBase(sessionName, tags, null, 0);
-          }
-          else
-          {
-            myClient.createSession(sessionName, tags, null, 0);
-          }
-          Log.i(TAG, "Session name is " + sessionName);
-        }
-        catch( CollabrifyException e ){Log.e(TAG, "error", e);}*/
-    	this.joinSession();
-    }
-    
-    public void joinSession(){ 
-    	try
-        {
-          myClient.requestSessionList(tags); //grabs list of available sessions & opens C0llabT3xt2319
-        }
-        catch( Exception e ){Log.e(TAG, "error", e);}
     }
     
     public void leaveSession(){
