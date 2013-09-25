@@ -43,8 +43,8 @@ public class CircularBuffer<T> {
 		Log.w("Header_ptr:", String.valueOf(head_ptr));
 		Log.w("local_ptr:", String.valueOf(local_ptr));
 		if(local_ptr != head_ptr){
-			//if(buffer.get(local_ptr) == null){
-			//	local_ptr++;
+			//if(buffer.(local_ptr)){
+				//local_ptr++;
 			//}
 			return buffer.get(local_ptr);
 		}

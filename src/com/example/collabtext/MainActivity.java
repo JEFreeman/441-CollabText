@@ -66,20 +66,23 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_doc_edit);
-
+		setContentView(R.layout.activity_main);
+		createButton = (Button) findViewById(R.id.createSession);
 
 		//withBaseFile = (CheckBox) findViewById(R.id.withBaseFileCheckBox);
 
 		/*broadcastText = (EditText) findViewById(R.id.sendTxt);
 		textViewer = (EditText) findViewById(R.id.editText1);
 	    broadcastButton = (Button) findViewById(R.id.sendButton);
+	    
 	    joinSessionButton = (Button) findViewById(R.id.joinButt);
 	    leaveSessionButton = (Button) findViewById(R.id.leaveButt);
-*/
+		 */
+		
 	    // enable logging
 	    Logger.getLogger("edu.umich.imlc.collabrify.client").setLevel(LOGGING_LEVEL);
-
+	    
+	    
 	    //pull text from broadcast box and send it to myClient
 	    broadcastButton.setOnClickListener(new OnClickListener()
 	    {
@@ -119,7 +122,7 @@ public class MainActivity extends Activity {
 	          Random rand = new Random();
 	          sessionName = "C0llabT3xt " + rand.nextInt(Integer.MAX_VALUE);
 
-	          if( false)//withBaseFile.isChecked() ) //NOTE: must have a checkbox/option for this, currently unused.
+	          if(false)//withBaseFile.isChecked() ) //NOTE: must have a checkbox/option for this, currently unused.
 	          {
 	            // initialize basefile data for this example we will use the session
 	            // name as the data
@@ -159,7 +162,7 @@ public class MainActivity extends Activity {
 	      {
 	        try
 	        {
-	          if( myClient.inSession() )
+	          if(myClient.inSession() )
 	            myClient.leaveSession(false); //if true, deletes session when owner leaves
 	        }
 	        catch( CollabrifyException e ){Log.e(TAG, "error", e);}
@@ -222,7 +225,7 @@ public class MainActivity extends Activity {
 	          return;
 	        }
 	        List<String> sessionNames = new ArrayList<String>();
-	        for( CollabrifySession s : sessionList )
+	        for(CollabrifySession s : sessionList )
 	        {
 	          sessionNames.add(s.name());
 	        }
@@ -266,7 +269,9 @@ public class MainActivity extends Activity {
 	          @Override
 	          public void run()
 	          {
-	        	  createButton.setText(sessionName); 
+	        	  Intent i = new Intent(null, DocEditActivity.class); 
+	        	  startActivity(i);
+	        	  //createButton.setText(sessionName); 
 	        	  //unnecessary, but should display sessionname somewhere
 	          }
 	        });

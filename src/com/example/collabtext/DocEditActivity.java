@@ -42,6 +42,7 @@ import android.view.View.OnClickListener;
 public class DocEditActivity extends Activity {
 	
 	User notepad;
+	
 	private static final Level LOGGING_LEVEL = Level.ALL;
 	private static String TAG = "collabText";
 	private CollabrifyClient myClient;
@@ -58,7 +59,7 @@ public class DocEditActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_doc_edit);
         EditText ref = (EditText) findViewById(R.id.editText1);
-        notepad = new User(ref);
+        notepad = new User(ref, this);
         
         // enable logging
 	    Logger.getLogger("edu.umich.imlc.collabrify.client").setLevel(LOGGING_LEVEL);
@@ -101,9 +102,22 @@ public class DocEditActivity extends Activity {
 		      
               try
               {
-                sessionId = sessionList.get(watcher).id();
-                sessionName = sessionList.get(watcher).name();
-                myClient.joinSession(sessionId, null);
+            	  if(watcher == -1){
+            		  try
+            	        {
+            	          sessionName = "C0llabT3xt2319"; //name hardcoded for now            	         
+            	          myClient.createSession(sessionName, tags, null, 0);
+            	          Log.i(TAG, "Session name is " + sessionName);
+            	        }
+            	        catch( CollabrifyException e ){
+            	        		Log.e(TAG, "error", e);
+            	        }
+            	  }
+            	  else{
+            		  sessionId = sessionList.get(watcher).id();
+            		  sessionName = sessionList.get(watcher).name();
+            		  myClient.joinSession(sessionId, null);
+            	  }
               }
               catch( CollabrifyException e ){Log.e(TAG, "error", e);}
 		    }
@@ -118,7 +132,8 @@ public class DocEditActivity extends Activity {
 		          @Override
 		          public void run()
 		          {
-		        	  //currently does nothing on disconnect.
+		        	  Intent i = new Intent(null, MainActivity.class);
+		        	  startActivity(i);
 		          }
 		        });
 		      }
@@ -139,10 +154,10 @@ public class DocEditActivity extends Activity {
 		            globalMove message;
 					try {
 						message = globalMove.parseFrom(data);
-						
 						//textViewer.setText(message.getText()); 
 						//need to edit this to send user the data.
 						//should write to the text box when text is sent over the connection.
+						notepad.updateLocal(message.getLocation(), message.getLength(), message.getText(), message.getDelete());
 					} catch (InvalidProtocolBufferException e) {
 						// TODO Auto-generated catch block
 						Log.e(TAG, "error", e);
@@ -151,7 +166,7 @@ public class DocEditActivity extends Activity {
 		          }
 		        });
 		      }
-		    
+		    /*
 		    @Override
 		      public void onSessionCreated(long id)
 		      {
@@ -163,15 +178,15 @@ public class DocEditActivity extends Activity {
 		          @Override
 		          public void run()
 		          {
-		        	  //createButton.setText(sessionName); 
-		        	  //unnecessary, but should display sessionname somewhere
+		        	 
 		          }
 		        });
 		      }
+		      */
 		    
 		    @Override
 		      public void onError(CollabrifyException e){Log.e(TAG, "error", e);}
-		    
+		    /*
 		    @Override
 		      public void onSessionJoined(long maxOrderId, long baseFileSize)
 		      {
@@ -192,7 +207,7 @@ public class DocEditActivity extends Activity {
 		          }
 		        });
 		      }
-		    
+		    */
 		    @Override
 		      public byte[] onBaseFileChunkRequested(long currentBaseFileSize)
 		      {
@@ -320,11 +335,10 @@ public class DocEditActivity extends Activity {
     }
     
     public void createSession(){
-    	this.joinSession();
     	/*try
         {
           sessionName = "C0llabT3xt2319"; //name hardcoded for now
-         
+
           if( false)//withBaseFile.isChecked() ) //NOTE: must have a checkbox/option for this, currently unused.
           {
             // initialize basefile data for this example we will use the session
@@ -339,8 +353,8 @@ public class DocEditActivity extends Activity {
           }
           Log.i(TAG, "Session name is " + sessionName);
         }
-        catch( CollabrifyException e ){Log.e(TAG, "error", e);}
-        */
+        catch( CollabrifyException e ){Log.e(TAG, "error", e);}*/
+    	this.joinSession();
     }
     
     public void joinSession(){ 
