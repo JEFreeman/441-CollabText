@@ -16,6 +16,6 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="40dp"
         android:text="@string/join_session"
-        android:onClick="join()" />
+        android:onClick="join" />
 
 </RelativeLayout>

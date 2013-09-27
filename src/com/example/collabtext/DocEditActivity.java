@@ -1,16 +1,11 @@
 package com.example.collabtext;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.CheckBox;
 import android.widget.EditText;
-import android.content.DialogInterface;
 import android.content.Intent;
 
 import java.io.ByteArrayInputStream;
@@ -18,7 +13,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -28,25 +22,19 @@ import edu.umich.imlc.collabrify.client.CollabrifyClient;
 import edu.umich.imlc.collabrify.client.CollabrifyListener;
 import edu.umich.imlc.collabrify.client.CollabrifySession;
 import edu.umich.imlc.collabrify.client.exceptions.CollabrifyException;
+
 import com.example.collabtext.CollabTextProto.globalMove;
 import com.google.protobuf.InvalidProtocolBufferException;
-
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.util.Log;
-import android.view.Menu;
-import android.view.View;
-import android.view.View.OnClickListener;
 
 
 public class DocEditActivity extends Activity {
 	
-	User notepad;
+	private User notepad;
 	
 	private static final Level LOGGING_LEVEL = Level.ALL;
 	private static String TAG = "collabText";
 	private CollabrifyClient myClient;
-	private CheckBox withBaseFile;
+	//private CheckBox withBaseFile;
 	private CollabrifyListener collabrifyListener;
 	private long sessionId;
 	private String sessionName;
@@ -55,7 +43,8 @@ public class DocEditActivity extends Activity {
 	private ArrayList<String> tags = new ArrayList<String>();
 	
 	@Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState){
+		
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_doc_edit);
         EditText ref = (EditText) findViewById(R.id.editText1);
@@ -63,51 +52,27 @@ public class DocEditActivity extends Activity {
         
         // enable logging
 	    Logger.getLogger("edu.umich.imlc.collabrify.client").setLevel(LOGGING_LEVEL);
-
-	    boolean getLatestEvent = false; 
-	    //true == only get latest update (used for models where whole file is sent at once.
-	    //false allows it to grab all updates.
-
-	    // Instantiate client object
-	    try
-	    {
-	      myClient = new CollabrifyClient(this, "user email", "user display name",
-	          "441fall2013@umich.edu", "XY3721425NoScOpE", getLatestEvent,
-	          collabrifyListener);
-	      
-	      Log.i(TAG, "myclient Created");
-	      
-	    }
-	    catch( CollabrifyException e )
-	    {
-	      e.printStackTrace();
-	    }
 	    
 	    tags.add("default");
-	    
 	    
 	    collabrifyListener = new CollabrifyAdapter(){
 		    @Override
 		    public void onReceiveSessionList(final List<CollabrifySession> sessionList)
 		    {
-		      if( sessionList.isEmpty() )
-		      {
-		        Log.i(TAG, "No session available");
-		        return;
-		      }
-		      List<String> sessionNames = new ArrayList<String>();
-		      int watcher = -1;
+		      boolean exist = false;
 		      int clock = 0;
-		      for( CollabrifySession s : sessionList )
+		      for(CollabrifySession s : sessionList)
 		      {
-		        if(s.name() == "C0llabT3xt2319")
-		        	watcher = clock;
+		        if(s.name() == "C0llabT3xt2319"){
+		        	exist = true;
+		        	break;
+		        }
 		        clock++;
 		      }
 		      
               try
               {
-            	  if(watcher == -1){
+            	  if(!exist){
             		  try
             	        {
             	          sessionName = "C0llabT3xt2319"; //name hardcoded for now            	         
@@ -119,8 +84,8 @@ public class DocEditActivity extends Activity {
             	        }
             	  }
             	  else{
-            		  sessionId = sessionList.get(watcher).id();
-            		  sessionName = sessionList.get(watcher).name();
+            		  sessionId = sessionList.get(clock).id();
+            		  sessionName = sessionList.get(clock).name();
             		  myClient.joinSession(sessionId, null);
             	  }
               }
@@ -133,13 +98,9 @@ public class DocEditActivity extends Activity {
 		        Log.i(TAG, "disconnected");
 		        runOnUiThread(new Runnable()
 		        {
-
+		        	
 		          @Override
-		          public void run()
-		          {
-		        	  Intent i = new Intent(null, MainActivity.class);
-		        	  startActivity(i);
-		          }
+		          public void run(){}
 		        });
 		      }
 		    
@@ -154,17 +115,12 @@ public class DocEditActivity extends Activity {
 		          public void run()
 		          {
 		            Utils.printMethodName(TAG);
-		            String message1 = new String(data);
 
 		            globalMove message;
 					try {
 						message = globalMove.parseFrom(data);
-						//textViewer.setText(message.getText()); 
-						//need to edit this to send user the data.
-						//should write to the text box when text is sent over the connection.
 						notepad.updateLocal(message.getLocation(), message.getLength(), message.getText(), message.getDelete());
 					} catch (InvalidProtocolBufferException e) {
-						// TODO Auto-generated catch block
 						Log.e(TAG, "error", e);
 					}
 
@@ -178,12 +134,8 @@ public class DocEditActivity extends Activity {
 		        sessionId = id;
 		        runOnUiThread(new Runnable()
 		        {
-	
 		          @Override
-		          public void run()
-		          {
-		        	 
-		          }
+		          public void run(){}
 		        });
 		      }
 		        
@@ -203,11 +155,7 @@ public class DocEditActivity extends Activity {
 		        {
 
 		          @Override
-		          public void run()
-		          {
-		        	  //createButton.setText(sessionName);
-		        	  //same as created
-		          }
+		          public void run(){}
 		        });
 		      }
 		    
@@ -293,7 +241,6 @@ public class DocEditActivity extends Activity {
 		      }
 	    };
 	    
-	    
 	    //create or join session
 	    if(myClient.inSession())
     	{
@@ -303,32 +250,27 @@ public class DocEditActivity extends Activity {
 	        }
 	        catch( Exception e ){Log.e(TAG, "error", e);}
     	}
-    	else
-    	{
-    		sessionName = "C0llabT3xt2319555"; //name hardcoded for now
-    		try
-            {
-              
 
-              if( false)//withBaseFile.isChecked() ) //NOTE: must have a checkbox/option for this, currently unused.
-              {
-                // initialize basefile data for this example we will use the session
-                // name as the data
-                baseFileBuffer = new ByteArrayInputStream(sessionName.getBytes());
+	    boolean getLatestEvent = false; 
+	    //true == only get latest update (used for models where whole file is sent at once.
+	    //false allows it to grab all updates.
 
-                myClient.createSessionWithBase(sessionName, tags, null, 0);
-              }
-              else
-              {
-                myClient.createSession(sessionName, tags, null, 0);
-              }
-              Log.i(TAG, "Session name is " + sessionName);
-            }
-            catch( CollabrifyException e ){Log.e(TAG, "Collab Connect Try Error", e);}
-    	}
+	    // Instantiate client object
+	    try
+	    {
+	      myClient = new CollabrifyClient(this, "user email", "user display name",
+	          "441fall2013@umich.edu", "XY3721425NoScOpE", getLatestEvent,
+	          collabrifyListener);
+	    
+	      Log.i(TAG, "myclient Created");
+	      
+	    }
+	    catch( CollabrifyException e )
+	    {
+	      e.printStackTrace();
+	    }
 
-    }
-	
+	 }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -346,6 +288,7 @@ public class DocEditActivity extends Activity {
     
     public void backToMain(MenuItem menu){
     	Intent i = new Intent(this, MainActivity.class);
+    	leaveSession();
 		startActivity(i);
     }
     
@@ -373,7 +316,7 @@ public class DocEditActivity extends Activity {
     public void leaveSession(){
     	try
         {
-          if( myClient.inSession() )
+          if(myClient.inSession())
             myClient.leaveSession(false); //if true, deletes session when owner leaves
         }
         catch( CollabrifyException e ){Log.e(TAG, "error", e);}
