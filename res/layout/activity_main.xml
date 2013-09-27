@@ -9,15 +9,6 @@
     tools:context=".MainActivity" >
 
     <Button
-        android:id="@+id/createSession"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/joinSession"
-        android:layout_centerHorizontal="true"
-        android:text="@string/create_session"
-        android:onClick="create" />
-
-    <Button
         android:id="@+id/joinSession"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -25,6 +16,6 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="40dp"
         android:text="@string/join_session"
-        android:onClick="join" />
+        android:onClick="join()" />
 
 </RelativeLayout>

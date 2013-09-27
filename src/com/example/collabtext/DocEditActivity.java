@@ -171,7 +171,6 @@ public class DocEditActivity extends Activity {
 		          }
 		        });
 		      }
-		    /*
 		    @Override
 		      public void onSessionCreated(long id)
 		      {
@@ -187,11 +186,10 @@ public class DocEditActivity extends Activity {
 		          }
 		        });
 		      }
-		      */
-		    
+		        
 		    @Override
 		      public void onError(CollabrifyException e){Log.e(TAG, "error", e);}
-		    /*
+		    
 		    @Override
 		      public void onSessionJoined(long maxOrderId, long baseFileSize)
 		      {
@@ -212,7 +210,7 @@ public class DocEditActivity extends Activity {
 		          }
 		        });
 		      }
-		    */
+		    
 		    @Override
 		      public byte[] onBaseFileChunkRequested(long currentBaseFileSize)
 		      {
@@ -343,7 +341,7 @@ public class DocEditActivity extends Activity {
     }
     
     public void redo(MenuItem menu){
-    	//notepad.redo();
+    	notepad.redo();
     }
     
     public void backToMain(MenuItem menu){

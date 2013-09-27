@@ -32,9 +32,9 @@ public class User {
 	private string update;
 
 	private Queue<Move> globalChange;
-	TextWatcher collectText;
-	Move move_to_add;
-	Move cur_move;
+	private TextWatcher collectText;
+	private Move move_to_add;
+	private Move cur_move;
 	private CircularBuffer<Move> undoRedoList;
 	private EditText user_text; 
 	private DocEditActivity docEdit;
@@ -54,6 +54,11 @@ public class User {
 		docEdit = docEditSrc;
 		newTextWatch();
 		user_text.addTextChangedListener(collectText);
+	}
+	
+	public interface UserNote {
+		
+		public 
 	}
 	
 	private void newTextWatch(){
