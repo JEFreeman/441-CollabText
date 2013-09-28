@@ -14,25 +14,38 @@ public class CircularBuffer<T> {
 	private Vector<T> buffer;
 	private int head_ptr;
 	private int local_ptr;
+	private int neg_ptr;
 	
 	
 	CircularBuffer(){
 		this.head_ptr = 0;
 		this.local_ptr = 0;
+		this.neg_ptr = MAXSIZE - 1;
 		buffer = new Vector<T>();
 		buffer.setSize(MAXSIZE);
 		//Log.d("constructor", String.valueOf(buffer.size()));
 	}
 	
 	public void add(T addedObject){
-		buffer.set(head_ptr, addedObject);
+		buffer.set(local_ptr, addedObject);
 		//Log.d("ADDED", "Object");
-		head_ptr++;
-		if(head_ptr == MAXSIZE){
-			head_ptr = 0;
+		
+		local_ptr++;
+		if(local_ptr == MAXSIZE){
+			local_ptr = 0;
 		}
 		
-		local_ptr = head_ptr;
+		
+		head_ptr = local_ptr;
+		
+		if(head_ptr == neg_ptr){
+			neg_ptr++;
+		}
+		if(neg_ptr == MAXSIZE){
+			neg_ptr = 0;
+		}
+		
+		buffer.set(neg_ptr, null);
 	}
 	
 	public T getUndo(){	
@@ -42,11 +55,14 @@ public class CircularBuffer<T> {
 		}
 		Log.w("Header_ptr:", String.valueOf(head_ptr));
 		Log.w("local_ptr:", String.valueOf(local_ptr));
-		if(local_ptr != head_ptr){
+		if(local_ptr != neg_ptr){
 			return buffer.get(local_ptr);
 		}
 		else{
 			local_ptr++;
+			if(local_ptr == MAXSIZE){
+				local_ptr = 0;
+			}
 			return null; 
 		}
 	}
@@ -55,11 +71,12 @@ public class CircularBuffer<T> {
 		Log.w("Header_ptr:", String.valueOf(head_ptr));
 		Log.w("local_ptr:", String.valueOf(local_ptr));
 		if(local_ptr != head_ptr){
+			T temp =  buffer.get(local_ptr);
 			local_ptr++;
 			if(local_ptr == MAXSIZE){
 				local_ptr = 0;
 			}
-			return buffer.get(local_ptr);
+			return temp;
 		}
 		else{
 			return null; 
