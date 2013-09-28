@@ -9,7 +9,7 @@ import android.util.Log;
 
 public class CircularBuffer<T> {
 	
-	final int MAXSIZE = 100;
+	final int MAXSIZE = 20;
 	
 	private Vector<T> buffer;
 	private int head_ptr;
@@ -25,7 +25,6 @@ public class CircularBuffer<T> {
 	}
 	
 	public void add(T addedObject){
-		//Log.d("the size of the buffer", String.valueOf(buffer.size()));
 		buffer.set(head_ptr, addedObject);
 		//Log.d("ADDED", "Object");
 		if(head_ptr == MAXSIZE){
@@ -43,9 +42,6 @@ public class CircularBuffer<T> {
 		Log.w("Header_ptr:", String.valueOf(head_ptr));
 		Log.w("local_ptr:", String.valueOf(local_ptr));
 		if(local_ptr != head_ptr){
-			//if(buffer.(local_ptr)){
-				//local_ptr++;
-			//}
 			return buffer.get(local_ptr);
 		}
 		else{
@@ -55,6 +51,8 @@ public class CircularBuffer<T> {
 	}
 
 	public T getRedo(){
+		Log.w("Header_ptr:", String.valueOf(head_ptr));
+		Log.w("local_ptr:", String.valueOf(local_ptr));
 		if(local_ptr != head_ptr){
 			local_ptr++;
 			if(local_ptr == MAXSIZE){
