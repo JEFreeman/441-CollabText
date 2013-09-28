@@ -63,7 +63,7 @@ public class DocEditActivity extends Activity {
 		      int clock = 0;
 		      for(CollabrifySession s : sessionList)
 		      {
-		        if(s.name() == "C0llabT3xt2319"){
+		        if(s.name().equals("C0llabT3xt23191")){
 		        	exist = true;
 		        	break;
 		        }
@@ -75,7 +75,7 @@ public class DocEditActivity extends Activity {
             	  if(!exist){
             		  try
             	        {
-            	          sessionName = "C0llabT3xt2319"; //name hardcoded for now            	         
+            	          sessionName = "C0llabT3xt23191"; //name hardcoded for now            	         
             	          myClient.createSession(sessionName, tags, null, 0);
             	          Log.i(TAG, "Session name is " + sessionName);
             	        }
@@ -146,7 +146,7 @@ public class DocEditActivity extends Activity {
 		      public void onSessionJoined(long maxOrderId, long baseFileSize)
 		      {
 		        Log.i(TAG, "Session Joined");
-		        if( baseFileSize > 0 )
+		        if(baseFileSize > 0)
 		        {
 		          //initialize buffer to receive base file
 		          baseFileReceiveBuffer = new ByteArrayOutputStream((int) baseFileSize);
@@ -242,15 +242,7 @@ public class DocEditActivity extends Activity {
 	    };
 	    
 	    //create or join session
-	    if(myClient.inSession())
-    	{
-	    	try
-	        {
-	          myClient.requestSessionList(tags); //grabs list of available sessions & opens C0llabT3xt2319
-	        }
-	        catch( Exception e ){Log.e(TAG, "error", e);}
-    	}
-
+	   
 	    boolean getLatestEvent = false; 
 	    //true == only get latest update (used for models where whole file is sent at once.
 	    //false allows it to grab all updates.
@@ -268,9 +260,16 @@ public class DocEditActivity extends Activity {
 	    catch( CollabrifyException e )
 	    {
 	      e.printStackTrace();
+	    } 
+	    
+		try
+	    {
+	      myClient.requestSessionList(tags); //grabs list of available sessions & opens C0llabT3xt2319
 	    }
-
-	 }
+	    catch( Exception e ){Log.e(TAG, "error", e);}
+    */
+        
+	}
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

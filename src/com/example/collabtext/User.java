@@ -1,6 +1,7 @@
 package com.example.collabtext;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Stack;
@@ -35,12 +36,12 @@ public class User {
 	private EditText user_text;
 	private DocEditActivity docEdit;
 
-	// used for talking with Collaborify
+	//used for talking with Collaborify
 	private string update;
-	private Queue<Move> globalChange;
-
-	// constructor
-	User(EditText ref, DocEditActivity docEditSrc) {
+	private Editable globalText;
+	
+	//constructor
+	User(EditText ref, DocEditActivity docEditSrc){
 		cursor_coordinate = 0;
 		prevStart = 0;
 		prevCount = 0;
@@ -48,14 +49,13 @@ public class User {
 		beforeStart = 0;
 		undoRedoList = new CircularBuffer<Move>();
 		cur_move = new Move(0, 0, "", true); // if you undo or redo before
-												// confirming a word
 		user_text = ref;
 		docEdit = docEditSrc;
 		newTextWatch();
 		user_text.addTextChangedListener(collectText);
 	}
 
-	private void newTextWatch() {
+	private void newTextWatch(){
 		prevStart = user_text.getSelectionStart();
 		beforeStart = user_text.getSelectionStart();
 		collectText = new TextWatcher() {
@@ -79,7 +79,6 @@ public class User {
 						beforeStart = start;
 					}
 				}
-
 			}
 
 			@Override
@@ -108,7 +107,7 @@ public class User {
 		};
 	}
 
-	public void undo() {
+	public void undo(){
 		if (cur_move != null) {
 			undoRedoList.add(cur_move);
 			cur_move = null;
@@ -121,6 +120,8 @@ public class User {
 		}
 		user_text.removeTextChangedListener(collectText);
 		Editable temp = user_text.getText();
+		
+		Log.d("CURRENT MOVE: ", temp.toString());
 		if (temp_move.type == INSERT) {
 			temp.delete(temp_move.start, temp_move.start + temp_move.length);
 			cursor_coordinate = temp_move.start;
@@ -138,7 +139,7 @@ public class User {
 		user_text.addTextChangedListener(collectText);
 	}
 
-	public void redo() {
+	public void redo(){
 		Move temp_move;
 		temp_move = undoRedoList.getRedo();
 		if (temp_move == null) {
@@ -148,13 +149,14 @@ public class User {
 		user_text.removeTextChangedListener(collectText);
 		Editable temp = user_text.getText();
 		printMove(temp_move);
-		if (temp_move.type == INSERT) {
+		Log.d("CURRENT MOVE: ", temp.toString());
+		if (temp_move.type == REMOVE) {
 			temp.delete(temp_move.start, temp_move.start + temp_move.length);
 			cursor_coordinate = temp_move.start;
 			user_text.setText(temp);
 			user_text.setSelection(cursor_coordinate);
-		} else {
-			Log.d("REMOVE YOU NEED TO ADD", temp_move.change);
+		} 
+		else{
 			CharSequence insert = temp
 					.insert(temp_move.start, temp_move.change);
 			user_text.setText(insert);
@@ -165,33 +167,27 @@ public class User {
 		user_text.addTextChangedListener(collectText);
 	}
 
-	void updateLocal(int start, int length, String s, boolean type) {
-		Move updated_move = new Move(start, length, s, type);
-		globalChange.add(updated_move);
+	void updateLocal(int start, int length, String s, boolean type){
+		if(type){
+			globalText.delete(start, start+length);
+		}
+		else{
+			globalText.insert(start, s);
+		}
 	}
 
 	void checkUpdate() {
-		Editable globalText;
-		Move tempGlobal;
-		globalText = user_text.getText();
-
-		while (!globalChange.isEmpty()) {
-			tempGlobal = globalChange.poll();
-			if (tempGlobal.type) {
-				globalText.delete(tempGlobal.start, tempGlobal.start
-						+ tempGlobal.length);
-			} else {
-				globalText.insert(tempGlobal.start, tempGlobal.change);
+		if(globalText.equals(user_text.getText())){
+			user_text.setText((CharSequence) globalText.toString());
 			}
 		}
-	}
 	
 	//testing function
 	private void printMove(Move m) {
-		Log.i("MOVE_start_coordinate:", String.valueOf(m.start));
-		Log.i("MOVE_length:", String.valueOf(m.length));
-		Log.i("MOVE_change:", m.change);
-		Log.i("MOVE_type:", String.valueOf(m.type));
+		Log.d("MOVE_start_coordinate:", String.valueOf(m.start));
+		Log.d("MOVE_length:", String.valueOf(m.length));
+		Log.d("MOVE_change:", m.change);
+		Log.d("MOVE_type:", String.valueOf(m.type));
 
 	}
 
