@@ -28,10 +28,11 @@ public class CircularBuffer<T> {
 		//Log.d("the size of the buffer", String.valueOf(buffer.size()));
 		buffer.set(head_ptr, addedObject);
 		//Log.d("ADDED", "Object");
+		head_ptr++;
 		if(head_ptr == MAXSIZE){
 			head_ptr = 0;
 		}
-		head_ptr++;
+		
 		local_ptr = head_ptr;
 	}
 	
