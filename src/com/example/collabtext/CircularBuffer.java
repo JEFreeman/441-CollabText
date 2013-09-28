@@ -9,18 +9,16 @@ import android.util.Log;
 
 public class CircularBuffer<T> {
 	
-	final int MAXSIZE = 10;
+	final int MAXSIZE = 100;
 	
 	private Vector<T> buffer;
 	private int head_ptr;
 	private int local_ptr;
-	private int tail_ptr;
 	
 	
 	CircularBuffer(){
 		this.head_ptr = 0;
 		this.local_ptr = 0;
-		this.tail_ptr = 0;
 		buffer = new Vector<T>();
 		buffer.setSize(MAXSIZE);
 		//Log.d("constructor", String.valueOf(buffer.size()));
@@ -30,10 +28,10 @@ public class CircularBuffer<T> {
 		//Log.d("the size of the buffer", String.valueOf(buffer.size()));
 		buffer.set(head_ptr, addedObject);
 		//Log.d("ADDED", "Object");
-		head_ptr++;
 		if(head_ptr == MAXSIZE){
 			head_ptr = 0;
 		}
+		head_ptr++;
 		local_ptr = head_ptr;
 	}
 	
@@ -67,17 +65,6 @@ public class CircularBuffer<T> {
 		else{
 			return null; 
 		}
-	}
-	
-	public void log(){
-		
-		for(int i = 0; i < buffer.size(); i++){
-			Move temp = (Move) buffer.get(i);
-			if(temp != null){
-			Log.d("", "|start: " + temp.start + " | length: " + temp.length + " | change: " + temp.change + " | type: " + temp.type + " |");
-			}
-		}
-	
 	}
 	
 }
