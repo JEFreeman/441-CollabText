@@ -30,7 +30,7 @@ import com.google.protobuf.InvalidProtocolBufferException;
 public class DocEditActivity extends Activity {
 	
 	private int idCount = 0;
-	private int clock = -1;
+	private int idClock = -1;
 	
 	private User notepad;
 	
@@ -122,10 +122,11 @@ public class DocEditActivity extends Activity {
 		            globalMove message;
 					try {
 						message = globalMove.parseFrom(data);
-						if(message.getId() == (clock + 1))
+						int temp = idClock + 1;
+						if(message.getId() == temp)
 						{
 							notepad.updateLocal(message.getLocation(), message.getLength(), message.getText(), message.getDelete());
-							clock++;
+							idClock++;
 						}
 					} catch (InvalidProtocolBufferException e) {
 						Log.e(TAG, "error", e);
