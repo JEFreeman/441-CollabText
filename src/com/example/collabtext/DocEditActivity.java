@@ -29,6 +29,9 @@ import com.google.protobuf.InvalidProtocolBufferException;
 
 public class DocEditActivity extends Activity {
 	
+	private int idCount = 0;
+	private int clock = -1;
+	
 	private User notepad;
 	
 	private static final Level LOGGING_LEVEL = Level.ALL;
@@ -119,7 +122,11 @@ public class DocEditActivity extends Activity {
 		            globalMove message;
 					try {
 						message = globalMove.parseFrom(data);
-						notepad.updateLocal(message.getLocation(), message.getLength(), message.getText(), message.getDelete());
+						if(message.getId() == (clock + 1))
+						{
+							notepad.updateLocal(message.getLocation(), message.getLength(), message.getText(), message.getDelete());
+							clock++;
+						}
 					} catch (InvalidProtocolBufferException e) {
 						Log.e(TAG, "error", e);
 					}
@@ -267,7 +274,7 @@ public class DocEditActivity extends Activity {
 	      myClient.requestSessionList(tags); //grabs list of available sessions & opens C0llabT3xt2319
 	    }
 	    catch( Exception e ){Log.e(TAG, "error", e);}
-    */
+    
         
 	}
     @Override
@@ -300,11 +307,14 @@ public class DocEditActivity extends Activity {
         	globalMove message = 
         			globalMove.newBuilder()
         			.setDelete(false)
+        			.setId(idCount)
         			.setLocation(0)
         			.setLength(text.length())
         			.setText(text)
         			.build();
-
+        	
+        	idCount++;
+        	
             myClient.broadcast(message.toByteArray(), "lol");
           }
           catch( CollabrifyException e ){Log.e(TAG, "error", e);}
