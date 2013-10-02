@@ -27,15 +27,26 @@ public class CircularBuffer {
 	}
 	
 	//update by an offset
-	public void offset(int offset, int length){
+	public void offset(int start, int length, boolean type){
 		int temp_ptr = this.head_ptr;
-		while(temp_ptr != neg_ptr){
+		while(temp_ptr != neg_ptr){ //loop through valid portion of buffer
 			Move temp_move = buffer.elementAt(temp_ptr);
-			if(offset < temp_move.start){
-				temp_move.start += length;
+			if(temp_move == null){
+				return;
+			}
+			if(start < temp_move.start){
+				if(type && temp_move.start > start){ //delete
+					temp_move.start -= length;
+				}
+				else if(!type && temp_move.start > start){ //add
+					temp_move.start += length;
+				}
 			}
 		}
 	}
+	
+	
+	
 	
 	public void add(Move addedObject){
 		buffer.set(local_ptr, addedObject);
