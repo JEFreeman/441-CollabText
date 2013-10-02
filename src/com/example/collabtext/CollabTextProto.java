@@ -31,37 +31,47 @@ public final class CollabTextProto {
      */
     int getId();
 
-    // required int32 location = 3;
+    // required int32 userId = 3;
     /**
-     * <code>required int32 location = 3;</code>
+     * <code>required int32 userId = 3;</code>
+     */
+    boolean hasUserId();
+    /**
+     * <code>required int32 userId = 3;</code>
+     */
+    int getUserId();
+
+    // required int32 location = 4;
+    /**
+     * <code>required int32 location = 4;</code>
      */
     boolean hasLocation();
     /**
-     * <code>required int32 location = 3;</code>
+     * <code>required int32 location = 4;</code>
      */
     int getLocation();
 
-    // required int32 length = 4;
+    // required int32 length = 5;
     /**
-     * <code>required int32 length = 4;</code>
+     * <code>required int32 length = 5;</code>
      */
     boolean hasLength();
     /**
-     * <code>required int32 length = 4;</code>
+     * <code>required int32 length = 5;</code>
      */
     int getLength();
 
-    // required string text = 5;
+    // required string text = 6;
     /**
-     * <code>required string text = 5;</code>
+     * <code>required string text = 6;</code>
      */
     boolean hasText();
     /**
-     * <code>required string text = 5;</code>
+     * <code>required string text = 6;</code>
      */
     java.lang.String getText();
     /**
-     * <code>required string text = 5;</code>
+     * <code>required string text = 6;</code>
      */
     com.google.protobuf.ByteString
         getTextBytes();
@@ -129,16 +139,21 @@ public final class CollabTextProto {
             }
             case 24: {
               bitField0_ |= 0x00000004;
-              location_ = input.readInt32();
+              userId_ = input.readInt32();
               break;
             }
             case 32: {
               bitField0_ |= 0x00000008;
+              location_ = input.readInt32();
+              break;
+            }
+            case 40: {
+              bitField0_ |= 0x00000010;
               length_ = input.readInt32();
               break;
             }
-            case 42: {
-              bitField0_ |= 0x00000010;
+            case 50: {
+              bitField0_ |= 0x00000020;
               text_ = input.readBytes();
               break;
             }
@@ -214,49 +229,65 @@ public final class CollabTextProto {
       return id_;
     }
 
-    // required int32 location = 3;
-    public static final int LOCATION_FIELD_NUMBER = 3;
-    private int location_;
+    // required int32 userId = 3;
+    public static final int USERID_FIELD_NUMBER = 3;
+    private int userId_;
     /**
-     * <code>required int32 location = 3;</code>
+     * <code>required int32 userId = 3;</code>
      */
-    public boolean hasLocation() {
+    public boolean hasUserId() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
-     * <code>required int32 location = 3;</code>
+     * <code>required int32 userId = 3;</code>
+     */
+    public int getUserId() {
+      return userId_;
+    }
+
+    // required int32 location = 4;
+    public static final int LOCATION_FIELD_NUMBER = 4;
+    private int location_;
+    /**
+     * <code>required int32 location = 4;</code>
+     */
+    public boolean hasLocation() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    /**
+     * <code>required int32 location = 4;</code>
      */
     public int getLocation() {
       return location_;
     }
 
-    // required int32 length = 4;
-    public static final int LENGTH_FIELD_NUMBER = 4;
+    // required int32 length = 5;
+    public static final int LENGTH_FIELD_NUMBER = 5;
     private int length_;
     /**
-     * <code>required int32 length = 4;</code>
+     * <code>required int32 length = 5;</code>
      */
     public boolean hasLength() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
+      return ((bitField0_ & 0x00000010) == 0x00000010);
     }
     /**
-     * <code>required int32 length = 4;</code>
+     * <code>required int32 length = 5;</code>
      */
     public int getLength() {
       return length_;
     }
 
-    // required string text = 5;
-    public static final int TEXT_FIELD_NUMBER = 5;
+    // required string text = 6;
+    public static final int TEXT_FIELD_NUMBER = 6;
     private java.lang.Object text_;
     /**
-     * <code>required string text = 5;</code>
+     * <code>required string text = 6;</code>
      */
     public boolean hasText() {
-      return ((bitField0_ & 0x00000010) == 0x00000010);
+      return ((bitField0_ & 0x00000020) == 0x00000020);
     }
     /**
-     * <code>required string text = 5;</code>
+     * <code>required string text = 6;</code>
      */
     public java.lang.String getText() {
       java.lang.Object ref = text_;
@@ -273,7 +304,7 @@ public final class CollabTextProto {
       }
     }
     /**
-     * <code>required string text = 5;</code>
+     * <code>required string text = 6;</code>
      */
     public com.google.protobuf.ByteString
         getTextBytes() {
@@ -292,6 +323,7 @@ public final class CollabTextProto {
     private void initFields() {
       delete_ = false;
       id_ = 0;
+      userId_ = 0;
       location_ = 0;
       length_ = 0;
       text_ = "";
@@ -302,6 +334,10 @@ public final class CollabTextProto {
       if (isInitialized != -1) return isInitialized == 1;
 
       if (!hasId()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasUserId()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -331,13 +367,16 @@ public final class CollabTextProto {
         output.writeInt32(2, id_);
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeInt32(3, location_);
+        output.writeInt32(3, userId_);
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeInt32(4, length_);
+        output.writeInt32(4, location_);
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        output.writeBytes(5, getTextBytes());
+        output.writeInt32(5, length_);
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        output.writeBytes(6, getTextBytes());
       }
       getUnknownFields().writeTo(output);
     }
@@ -358,15 +397,19 @@ public final class CollabTextProto {
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(3, location_);
+          .computeInt32Size(3, userId_);
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(4, length_);
+          .computeInt32Size(4, location_);
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(5, getTextBytes());
+          .computeInt32Size(5, length_);
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(6, getTextBytes());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -488,12 +531,14 @@ public final class CollabTextProto {
         bitField0_ = (bitField0_ & ~0x00000001);
         id_ = 0;
         bitField0_ = (bitField0_ & ~0x00000002);
-        location_ = 0;
+        userId_ = 0;
         bitField0_ = (bitField0_ & ~0x00000004);
-        length_ = 0;
+        location_ = 0;
         bitField0_ = (bitField0_ & ~0x00000008);
-        text_ = "";
+        length_ = 0;
         bitField0_ = (bitField0_ & ~0x00000010);
+        text_ = "";
+        bitField0_ = (bitField0_ & ~0x00000020);
         return this;
       }
 
@@ -533,13 +578,17 @@ public final class CollabTextProto {
         if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
           to_bitField0_ |= 0x00000004;
         }
-        result.location_ = location_;
+        result.userId_ = userId_;
         if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
           to_bitField0_ |= 0x00000008;
         }
-        result.length_ = length_;
+        result.location_ = location_;
         if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
           to_bitField0_ |= 0x00000010;
+        }
+        result.length_ = length_;
+        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
+          to_bitField0_ |= 0x00000020;
         }
         result.text_ = text_;
         result.bitField0_ = to_bitField0_;
@@ -564,6 +613,9 @@ public final class CollabTextProto {
         if (other.hasId()) {
           setId(other.getId());
         }
+        if (other.hasUserId()) {
+          setUserId(other.getUserId());
+        }
         if (other.hasLocation()) {
           setLocation(other.getLocation());
         }
@@ -571,7 +623,7 @@ public final class CollabTextProto {
           setLength(other.getLength());
         }
         if (other.hasText()) {
-          bitField0_ |= 0x00000010;
+          bitField0_ |= 0x00000020;
           text_ = other.text_;
           onChanged();
         }
@@ -581,6 +633,10 @@ public final class CollabTextProto {
 
       public final boolean isInitialized() {
         if (!hasId()) {
+          
+          return false;
+        }
+        if (!hasUserId()) {
           
           return false;
         }
@@ -684,82 +740,115 @@ public final class CollabTextProto {
         return this;
       }
 
-      // required int32 location = 3;
-      private int location_ ;
+      // required int32 userId = 3;
+      private int userId_ ;
       /**
-       * <code>required int32 location = 3;</code>
+       * <code>required int32 userId = 3;</code>
        */
-      public boolean hasLocation() {
+      public boolean hasUserId() {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       /**
-       * <code>required int32 location = 3;</code>
+       * <code>required int32 userId = 3;</code>
+       */
+      public int getUserId() {
+        return userId_;
+      }
+      /**
+       * <code>required int32 userId = 3;</code>
+       */
+      public Builder setUserId(int value) {
+        bitField0_ |= 0x00000004;
+        userId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required int32 userId = 3;</code>
+       */
+      public Builder clearUserId() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        userId_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // required int32 location = 4;
+      private int location_ ;
+      /**
+       * <code>required int32 location = 4;</code>
+       */
+      public boolean hasLocation() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      /**
+       * <code>required int32 location = 4;</code>
        */
       public int getLocation() {
         return location_;
       }
       /**
-       * <code>required int32 location = 3;</code>
+       * <code>required int32 location = 4;</code>
        */
       public Builder setLocation(int value) {
-        bitField0_ |= 0x00000004;
+        bitField0_ |= 0x00000008;
         location_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required int32 location = 3;</code>
+       * <code>required int32 location = 4;</code>
        */
       public Builder clearLocation() {
-        bitField0_ = (bitField0_ & ~0x00000004);
+        bitField0_ = (bitField0_ & ~0x00000008);
         location_ = 0;
         onChanged();
         return this;
       }
 
-      // required int32 length = 4;
+      // required int32 length = 5;
       private int length_ ;
       /**
-       * <code>required int32 length = 4;</code>
+       * <code>required int32 length = 5;</code>
        */
       public boolean hasLength() {
-        return ((bitField0_ & 0x00000008) == 0x00000008);
+        return ((bitField0_ & 0x00000010) == 0x00000010);
       }
       /**
-       * <code>required int32 length = 4;</code>
+       * <code>required int32 length = 5;</code>
        */
       public int getLength() {
         return length_;
       }
       /**
-       * <code>required int32 length = 4;</code>
+       * <code>required int32 length = 5;</code>
        */
       public Builder setLength(int value) {
-        bitField0_ |= 0x00000008;
+        bitField0_ |= 0x00000010;
         length_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required int32 length = 4;</code>
+       * <code>required int32 length = 5;</code>
        */
       public Builder clearLength() {
-        bitField0_ = (bitField0_ & ~0x00000008);
+        bitField0_ = (bitField0_ & ~0x00000010);
         length_ = 0;
         onChanged();
         return this;
       }
 
-      // required string text = 5;
+      // required string text = 6;
       private java.lang.Object text_ = "";
       /**
-       * <code>required string text = 5;</code>
+       * <code>required string text = 6;</code>
        */
       public boolean hasText() {
-        return ((bitField0_ & 0x00000010) == 0x00000010);
+        return ((bitField0_ & 0x00000020) == 0x00000020);
       }
       /**
-       * <code>required string text = 5;</code>
+       * <code>required string text = 6;</code>
        */
       public java.lang.String getText() {
         java.lang.Object ref = text_;
@@ -773,7 +862,7 @@ public final class CollabTextProto {
         }
       }
       /**
-       * <code>required string text = 5;</code>
+       * <code>required string text = 6;</code>
        */
       public com.google.protobuf.ByteString
           getTextBytes() {
@@ -789,36 +878,36 @@ public final class CollabTextProto {
         }
       }
       /**
-       * <code>required string text = 5;</code>
+       * <code>required string text = 6;</code>
        */
       public Builder setText(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000010;
+  bitField0_ |= 0x00000020;
         text_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required string text = 5;</code>
+       * <code>required string text = 6;</code>
        */
       public Builder clearText() {
-        bitField0_ = (bitField0_ & ~0x00000010);
+        bitField0_ = (bitField0_ & ~0x00000020);
         text_ = getDefaultInstance().getText();
         onChanged();
         return this;
       }
       /**
-       * <code>required string text = 5;</code>
+       * <code>required string text = 6;</code>
        */
       public Builder setTextBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000010;
+  bitField0_ |= 0x00000020;
         text_ = value;
         onChanged();
         return this;
@@ -850,9 +939,10 @@ public final class CollabTextProto {
   static {
     java.lang.String[] descriptorData = {
       "\n\020CollabText.proto\022\026com.example.collabte" +
-      "xt\"X\n\nglobalMove\022\016\n\006delete\030\001 \001(\010\022\n\n\002id\030\002" +
-      " \002(\005\022\020\n\010location\030\003 \002(\005\022\016\n\006length\030\004 \002(\005\022\014" +
-      "\n\004text\030\005 \002(\tB\021B\017CollabTextProto"
+      "xt\"h\n\nglobalMove\022\016\n\006delete\030\001 \001(\010\022\n\n\002id\030\002" +
+      " \002(\005\022\016\n\006userId\030\003 \002(\005\022\020\n\010location\030\004 \002(\005\022\016" +
+      "\n\006length\030\005 \002(\005\022\014\n\004text\030\006 \002(\tB\021B\017CollabTe" +
+      "xtProto"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -864,7 +954,7 @@ public final class CollabTextProto {
           internal_static_com_example_collabtext_globalMove_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_com_example_collabtext_globalMove_descriptor,
-              new java.lang.String[] { "Delete", "Id", "Location", "Length", "Text", });
+              new java.lang.String[] { "Delete", "Id", "UserId", "Location", "Length", "Text", });
           return null;
         }
       };

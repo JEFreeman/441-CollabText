@@ -66,7 +66,7 @@ public class DocEditActivity extends Activity {
 		      int clock = 0;
 		      for(CollabrifySession s : sessionList)
 		      {
-		        if(s.name().equals("C0llabT3xt23191")){
+		        if(s.name().equals("C0llabT3xt23194")){
 		        	exist = true;
 		        	break;
 		        }
@@ -78,7 +78,7 @@ public class DocEditActivity extends Activity {
             	  if(!exist){
             		  try
             	        {
-            	          sessionName = "C0llabT3xt23191"; //name hardcoded for now            	         
+            	          sessionName = "C0llabT3xt23194"; //name hardcoded for now            	         
             	          myClient.createSession(sessionName, tags, null, 0);
             	          Log.i(TAG, "Session name is " + sessionName);
             	        }
@@ -92,7 +92,9 @@ public class DocEditActivity extends Activity {
             		  myClient.joinSession(sessionId, null);
             	  }
               }
-              catch( CollabrifyException e ){Log.e(TAG, "error", e);}
+              catch(CollabrifyException e){
+            	  	Log.e(TAG, "error", e);
+              }
 		    }
 		    
 		    @Override
@@ -125,7 +127,7 @@ public class DocEditActivity extends Activity {
 						int temp = idClock + 1;
 						if(message.getId() == temp)
 						{
-							notepad.updateLocal(message.getLocation(), message.getLength(), message.getText(), message.getDelete());
+							notepad.updateLocal(message.getLocation(), message.getLength(), message.getText(), message.getDelete(), message.getUserId());
 							idClock++;
 						}
 					} catch (InvalidProtocolBufferException e) {
@@ -299,7 +301,7 @@ public class DocEditActivity extends Activity {
 		startActivity(i);
     }
     
-    public void broadcastMessage(Boolean delete, int location, String text){
+    public void broadcastMessage(Boolean delete, int location, String text, int UserId){
     
     	if( myClient != null && myClient.inSession() ) //if in session
         {
@@ -307,9 +309,10 @@ public class DocEditActivity extends Activity {
           {
         	globalMove message = 
         			globalMove.newBuilder()
-        			.setDelete(false)
+        			.setDelete(delete)
         			.setId(idCount)
-        			.setLocation(0)
+        			.setUserId(UserId)
+        			.setLocation(location)
         			.setLength(text.length())
         			.setText(text)
         			.build();
