@@ -37,7 +37,7 @@ public class User {
 	
 	//constructor
 	User(EditText ref, DocEditActivity docEditSrc){
-		user_id = 555;
+		user_id = 123439;
 		cursor_coordinate = 0;
 		undoRedoList = new CircularBuffer();
 		user_text = ref;
@@ -151,18 +151,8 @@ public class User {
 	
 	
 	void updateLocal(int start, int length, String s, boolean type, int id){
-		
-		Log.e("DANS ERROR for START: ", String.valueOf(start));
-		Log.e("DANS ERROR for length: ", String.valueOf(length));
-		Log.e("DANS ERROR for s: ",  s);
-		Log.e("DANS ERROR for type: ", String.valueOf(type));
-		Log.e("DANS ERROR for STRING: ", globalText);
-		Log.e("DANS ERROR for id: ", id + "");
-		Log.e("DANS ERROR for myID: ", user_id + "");
+	
 		user_text.removeTextChangedListener(collectText);
-		
-		int curLoc = user_text.getSelectionStart();
-		Log.e("DANS ERROR for curAt: ", "" + curLoc);
 		if(start > globalText.length()){
 			start = globalText.length();
 		}
@@ -177,26 +167,24 @@ public class User {
 			temp_first = temp_first.concat(temp_second);
 		}
 		globalText = temp_first;
-		//if(id != user_id){
-			undoRedoList.offset(start, length, type);
+		if(id != user_id){
+			int curLoc = user_text.getSelectionStart();
+			Log.e("CURSOR LOCATION: ", String.valueOf(curLoc));
 			user_text.setText((CharSequence) globalText);
+			undoRedoList.offset(start, length, type);
 			if(type && curLoc > start){
 				Log.e("DANS ERROR for cur go delete: ", curLoc-length + "");
-				if(curLoc-length >= 0 && curLoc-length < globalText.length() )
-					user_text.setSelection(curLoc- length);
-				
+				user_text.setSelection(curLoc-length);
 			}
 			else if(!type && curLoc > start){
 				Log.e("DANS ERROR for cur go add: ", curLoc + length + "");
-				if(curLoc+length >= 0 && curLoc+length < globalText.length() )
-					user_text.setSelection(curLoc+length);
+				user_text.setSelection(curLoc+length-1);
 			}
 			else{
 				Log.e("DANS ERROR for cur leave it: ", curLoc + "");
-				if(curLoc >= 0 && curLoc < globalText.length() )
-					user_text.setSelection(curLoc);
+				user_text.setSelection(curLoc);
 			}
-		//}
+		}
 		newTextWatch();
 		user_text.addTextChangedListener(collectText);
 	}

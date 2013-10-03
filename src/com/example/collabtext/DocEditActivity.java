@@ -67,7 +67,7 @@ public class DocEditActivity extends Activity {
 		      int clock = 0;
 		      for(CollabrifySession s : sessionList)
 		      {
-		        if(s.name().equals("C0llabT3xt23132")){
+		        if(s.name().equals("C0llabT3xt23139")){
 		        	exist = true;
 		        	break;
 		        }
@@ -79,7 +79,7 @@ public class DocEditActivity extends Activity {
             	  if(!exist){
             		  try
             	        {
-            	          sessionName = "C0llabT3xt23132"; //name hardcoded for now            	         
+            	          sessionName = "C0llabT3xt23139"; //name hardcoded for now            	         
             	          myClient.createSession(sessionName, tags, null, 0);
             	          Log.i(TAG, "Session name is " + sessionName);
             	        }
@@ -126,17 +126,14 @@ public class DocEditActivity extends Activity {
 		            globalMove message;
 					try {
 						message = globalMove.parseFrom(data);
-						int temp = idClock + 1;
-						//if(message.getId() == temp)
-						//{
-							//if(sub_id == -1){
+							if(sub_id == -1){
 								notepad.updateLocal(message.getLocation(), message.getLength(), 
 											message.getText(), message.getDelete(), 0);
-							//}
-							//else{
-							//	notepad.updateLocal(message.getLocation(), message.getLength(), 
-							//			message.getText(), message.getDelete(), message.getUserId());
-							//}
+							}
+							else{
+								notepad.updateLocal(message.getLocation(), message.getLength(), 
+										message.getText(), message.getDelete(), message.getUserId());
+							}
 							
 							idClock++;
 						//}
